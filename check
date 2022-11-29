@@ -1,0 +1,25 @@
+#!/bin/bash
+
+service::config_set() {
+  config::check_or_set $@ $SERVICE_CONFIG
+}
+
+check() {
+  if [ "$DEBUG" = "true" ]; then
+    log::info "[DEBUG][service]: $SERVICE_CONFIG"
+    cat $SERVICE_CONFIG
+  fi
+
+  service::config_set SERVICE_S3FS_LOCAL_DATA_PATH text
+  if [ -z "$SERVICE_S3FS_LOCAL_DATA_PATH" ]; then
+    log:: error "[$(timestamp)] local data path is required"
+    return 1
+  fi
+
+  service::config_set SERVICE_S3FS_AWS_ACCESS_KEY text
+  service::config_set SERVICE_S3FS_AWS_ACCESS_SECRET text
+  service::config_set SERVICE_S3FS_AWS_S3_URL text
+  service::config_set SERVICE_S3FS_AWS_BUCKET text
+}
+
+check $@

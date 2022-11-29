@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  s3fs:
+    restart: always
+    image: whatwewant/s3fs:${SERVICE_S3FS_IMAGE_VERSION}
+    privileged: true
+    environment:
+      # DEBUG: 'true'
+      AWS_S3_URL: ${SERVICE_S3FS_AWS_S3_URL}
+      AWS_ACCESS_KEY_ID: ${SERVICE_S3FS_AWS_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${SERVICE_S3FS_AWS_ACCESS_SECRET}
+      AWS_STORAGE_BUCKET_NAME: ${SERVICE_S3FS_AWS_BUCKET}
+    volumes:
+      - ${SERVICE_S3FS_LOCAL_DATA_PATH}:/mnt:shared
+      
+networks:
+  default:
+    external: true
+    name: compose-ingress
